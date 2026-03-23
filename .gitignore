@@ -1,0 +1,6 @@
+output/*
+!output/.gitkeep
+!output/chapter-database.md
+.DS_Store
+.claude/settings.local.json
+.claude/personal/
