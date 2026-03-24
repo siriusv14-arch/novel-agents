@@ -7,7 +7,7 @@
 ### 1. リポジトリをクローン
 
 ```bash
-git clone https://github.com/kurihara-sdx/novel-agents.git
+git clone https://github.com/siriusv14-arch/novel-agents.git
 cd novel-agents
 ```
 
