@@ -99,6 +99,22 @@ Agent tool:
   name: foreshadowing-checker
   team_name: novel-{タイトルslug}
   run_in_background: true
+
+# 伏線ストラテジストを起動
+Agent tool:
+  subagent_type: llm-foreshadowing-strategist
+  model: sonnet
+  name: foreshadowing-strategist
+  team_name: novel-{タイトルslug}
+  run_in_background: true
+
+# AIらしさ検出エージェントを起動
+Agent tool:
+  subagent_type: llm-ai-detector
+  model: sonnet
+  name: ai-detector
+  team_name: novel-{タイトルslug}
+  run_in_background: true
 ```
 
 **重要: 全員を同じターンで `run_in_background: true` で起動すること。フォアグラウンドだとデッドロックする。**
@@ -133,7 +149,20 @@ SendMessage:
     【前章までの状況】{chapter-database.md から把握した内容}
 
     世界観リーダー（world-leader）から統合設定レポートがSendMessageで届きます。
-    届いたら章構成案を作成し、マネージャーに報告してください。
+    伏線ストラテジスト（foreshadowing-strategist）から伏線優先度レポートがSendMessageで届きます。
+    両方が揃ったら章構成案を作成し、マネージャーに報告してください。
+
+SendMessage:
+  to: foreshadowing-strategist
+  message: |
+    以下の章の構成案作成前に、伏線ストラテジーレポートを作成してください。
+
+    【今章の内容】{ユーザーの指示内容}
+    【今章の章番号】{章番号}
+    【出力先】{output_path}
+    【前章までの状況】{chapter-database.md から把握した内容}
+
+    完了後、プロットディレクター（plot-director）とマネージャーにSendMessageで報告してください。
 ```
 
 ---
@@ -244,6 +273,14 @@ SendMessage:
     章番号: {今章の章番号}
     結果保存先: {output_path}/foreshadowing-check.md
     伏線トラッカー更新先: output/chapter-database.md
+
+# AIらしさ検出
+SendMessage:
+  to: ai-detector
+  message: |
+    以下の章のAIらしさチェックを実施してください。
+    対象ファイル: {output_path}/chapter-XX.md
+    結果保存先: {output_path}/ai-detection.md
 ```
 
 **評価チームの合格基準:**
@@ -259,6 +296,10 @@ SendMessage:
 - 赤警告（10章以上放置）がある場合 → マネージャーがユーザーに通知する
 - 黄警告（5章以上放置）がある場合 → 最終報告に記載する
 - 伏線チェッカーが chapter-database.md の伏線トラッカーを自動更新する
+
+**AIらしさ検出:**
+- 80点未満 → 小説ライターに修正指示 → 再チェック
+- 80点以上 → 合格（スコアを最終報告に記載する）
 
 ---
 
@@ -307,6 +348,7 @@ SendMessage:
 - キャラクター評価: XX/100
 - 没入感評価: XX/100
 - 用語エラー: N件（全て修正済み）
+- AIらしさ検出: XX/100（検出パターン N件）
 - マネージャー最終: XX点
 
 【今章の伏線サマリー】
@@ -337,4 +379,6 @@ SendMessage: to: character-evaluator, message: {type: "shutdown_request"}
 SendMessage: to: immersion-evaluator, message: {type: "shutdown_request"}
 SendMessage: to: terminology-checker, message: {type: "shutdown_request"}
 SendMessage: to: foreshadowing-checker, message: {type: "shutdown_request"}
+SendMessage: to: foreshadowing-strategist, message: {type: "shutdown_request"}
+SendMessage: to: ai-detector, message: {type: "shutdown_request"}
 ```

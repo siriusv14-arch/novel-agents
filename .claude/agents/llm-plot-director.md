@@ -30,11 +30,21 @@ tools: Read, Write, Edit, Glob, Grep, Bash, SendMessage, TaskCreate, TaskUpdate,
 世界観リーダーからSendMessageで「統合設定レポート完成」の通知が来る。
 レポートファイルを読み込んで構成案作成に入る。
 
-### 2. 章管理台帳の確認
+### 2. 章管理台帳 + 伏線ストラテジーレポートの確認
+
 `output/chapter-database.md` を読んで以下を確認:
 - 前章までの主な出来事
 - 未回収の伏線
 - 直近の書き出しパターン（同じパターンを繰り返さない）
+
+伏線ストラテジスト（foreshadowing-strategist）から `{output_path}/foreshadowing-strategy.md` が届いたら必ず読む。
+
+**構成案への反映ルール:**
+- 🔴 必須の伏線 → 構成案に必ず組み込む（省略不可）
+- 🟡 推奨の伏線 → 今章のテーマと合うものを1〜2件組み込む
+- 🟢 任意の伏線 → 余裕があれば触れる程度でよい
+
+構成案をマネージャーに報告する際、**「今章で扱う伏線: F-xx, F-xx」を必ず記載する**。
 
 ### 3. 章構成案の作成
 保存先: `{output_path}/plot.md`
