@@ -1,6 +1,5 @@
-output/*
-!output/.gitkeep
-!output/chapter-database.md
+# output/ は全てGit管理対象
+!output/
 .DS_Store
 .claude/settings.local.json
 .claude/personal/
